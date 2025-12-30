@@ -14,15 +14,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "./theme-toggle";
+import { auth, signOut } from "@/utils/auth";
+
 
 export async function Navbar() {
+  const session = await auth();
   return (
     <nav className="flex justify-between items-center py-5">
       <Link href="/" className="flex items-center gap-2">
         <Image src={Logo} alt="Careero Logo" width={40} height={40} />
-        <h1 className="text-2xl font-bold">
-          Careero
-        </h1>
+        <h1 className="text-2xl font-bold">Careero</h1>
       </Link>
 
       {/* Desktop Navigation */}
@@ -31,12 +32,23 @@ export async function Navbar() {
           Post Job
         </Link>
 
-        <Link
-          href="/login"
-          className={buttonVariants({ variant: "outline", size: "lg" })}
-        >
-          Login
-        </Link>
+        {session?.user ? (
+          <form
+            action={async () => {
+              "use server";
+              await signOut({ redirectTo: "/" });
+            }}
+          >
+            <Button>Logout</Button>
+          </form>
+        ) : (
+          <Link
+            href="/login"
+            className={buttonVariants({ variant: "outline", size: "lg" })}
+          >
+            Login
+          </Link>
+        )}
 
         <ThemeToggle />
       </div>
