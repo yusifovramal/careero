@@ -1,5 +1,13 @@
-import { Button } from "../ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { SVGProps } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { signIn } from "@/utils/auth";
 
 const Github = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -54,15 +62,20 @@ function LoginForm() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <form>
+            <form
+              action={async () => {
+                "use server";
+                await signIn("github", { redirectTo: "/" });
+              }}
+            >
               <Button className="w-full" variant={"outline"}>
-                <Google /> Login with Google
+                <Github /> Login with Github
               </Button>
             </form>
             <form>
               <Button className="w-full" variant={"outline"}>
                 {" "}
-                <Github /> Login with Github
+                <Google /> Login with Google
               </Button>
             </form>
           </div>
@@ -76,4 +89,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm
+export default LoginForm;
