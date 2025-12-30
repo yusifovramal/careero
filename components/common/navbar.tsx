@@ -13,14 +13,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "./theme-toggle";
 
 export async function Navbar() {
   return (
     <nav className="flex justify-between items-center py-5">
       <Link href="/" className="flex items-center gap-2">
-        <Image src={Logo} alt="Job Marshal Logo" width={40} height={40} />
+        <Image src={Logo} alt="Careero Logo" width={40} height={40} />
         <h1 className="text-2xl font-bold">
-          Job<span className="text-primary">Marshal</span>
+          Careero
         </h1>
       </Link>
 
@@ -36,6 +37,8 @@ export async function Navbar() {
         >
           Login
         </Link>
+
+        <ThemeToggle />
       </div>
 
       {/* Mobile Navigation */}
