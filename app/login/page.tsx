@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Logo from "@/public/logo.png";
-import LoginForm from "@/components/forms/login-form";
+import { LoginForm } from "@/components/forms/login-form";
+
 
 const LoginPage = () => {
   return (

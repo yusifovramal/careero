@@ -1,14 +1,17 @@
-import { SVGProps } from "react";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { auth, signIn } from "@/utils/auth";
+} from "@/components/ui/card";
+import { signIn } from "@/utils/auth";
+
+import * as React from "react";
+import type { SVGProps } from "react";
 import { GeneralSubmitButton } from "../common/submit-buttons";
-import { redirect } from "next/navigation";
+
 
 const Github = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -53,42 +56,50 @@ const Google = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-async function LoginForm() {
-  const session = await auth();
-
-  if (session?.user) {
-    return redirect("/");
-  }
+export function LoginForm() {
   return (
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Please sign in to your account</CardDescription>
+          <CardDescription>
+            Login with your Apple or Google account
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-4">
-            <form
-              action={async () => {
-                "use server";
-                await signIn("github", { redirectTo: "/" });
-              }}
-            >
-              <GeneralSubmitButton
-                width="w-full"
-                text="Login with Github"
-                variant="outline"
-                icon={<Github />}
-              />
-            </form>
-            <form>
-              <GeneralSubmitButton
-                width="w-full"
-                text="Login with Google"
-                variant="outline"
-                icon={<Google />}
-              />
-            </form>
+          <div className="grid gap-6">
+            <div className="flex flex-col gap-4">
+              <form
+                action={async () => {
+                  "use server";
+                  await signIn("github", {
+                    redirectTo: "/",
+                  });
+                }}
+              >
+                <GeneralSubmitButton
+                  text="Login with GitHub"
+                  icon={<Github />}
+                  variant="outline"
+                  width="w-full"
+                />
+              </form>
+              <form
+                action={async () => {
+                  "use server";
+                  await signIn("google", {
+                    redirectTo: "/onboarding",
+                  });
+                }}
+              >
+                <GeneralSubmitButton
+                  text="Login with Google"
+                  icon={<Google />}
+                  variant="outline"
+                  width="w-full"
+                />
+              </form>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -99,5 +110,3 @@ async function LoginForm() {
     </div>
   );
 }
-
-export default LoginForm;
