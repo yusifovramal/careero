@@ -1,3 +1,4 @@
+import { UploadDropzone } from "@/components/common/upload-thing";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -147,7 +148,6 @@ function CompanyForm() {
           )}
         />
 
-        {/* Full width for logo upload */}
         <FormField
           control={form.control}
           name="logo"
@@ -175,7 +175,19 @@ function CompanyForm() {
                         <XIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  ) : null}
+                  ) : (
+                    <UploadDropzone
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                        field.onChange(res[0].ufsUrl);
+                       
+                      }}
+                      onUploadError={() => {
+                   
+                      }}
+                      className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
+                    />
+                  )}
                 </div>
               </FormControl>
               <FormMessage />
