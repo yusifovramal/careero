@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import Logo from "@/public/logo.png";
-import { User } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import UserTypeSelection from "./user-type-form";
@@ -21,7 +20,7 @@ function OnboardingForm() {
   function renderStep() {
     switch (step) {
       case 1:
-        return <UserTypeSelection onSelect={handleUserTypeSelection}/>;
+        return <UserTypeSelection onSelect={handleUserTypeSelection} />;
       case 2:
         return <p>Details form for {userType}</p>;
       default:
@@ -33,9 +32,7 @@ function OnboardingForm() {
     <>
       <div className="flex items-center gap-3 mb-10">
         <Image src={Logo} alt="JobMarshal Logo" width={50} height={50} />
-        <span className="text-4xl font-bold">
-            Careero
-        </span>
+        <span className="text-4xl font-bold">Careero</span>
       </div>
       <Card className="w-full max-w-lg">
         <CardContent className="p-6">{renderStep()}</CardContent>
