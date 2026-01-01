@@ -14,8 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "./theme-toggle";
-import { auth, signOut } from "@/utils/auth";
-
+import { auth, signOut } from "@/lib/auth";
 
 export async function Navbar() {
   const session = await auth();
