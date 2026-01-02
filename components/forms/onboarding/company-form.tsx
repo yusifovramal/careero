@@ -1,4 +1,8 @@
-import { UploadDropzone } from "@/components/common/upload-thing";
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,6 +13,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
+import { XIcon } from "lucide-react";
+
+import { useState } from "react";
+
 import {
   Select,
   SelectContent,
@@ -18,31 +28,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { countryList } from "@/lib/constants/countriesList";
 import { companySchema } from "@/lib/zodSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { XIcon } from "lucide-react";
-import Image from "next/image";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { createCompany } from "@/lib/actions";
+import { countryList } from "@/lib/constants/countriesList";
+import { UploadDropzone } from "@/components/common/upload-thing";
 
-function CompanyForm() {
+export default function CompanyForm() {
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: {
-      name: "",
-      location: "",
       about: "",
-      logo: "",
+      location: "",
       website: "",
       xAccount: "",
+      logo: "",
+      name: "",
     },
   });
 
+  const [pending, setPending] = useState(false);
+
+  async function onSubmit(values: z.infer<typeof companySchema>) {
+    try {
+      setPending(true);
+      await createCompany(values);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+      }
+    } finally {
+      setPending(false);
+    }
+  }
+
   return (
     <Form {...form}>
-      <form className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Two column layout for basic info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
@@ -148,6 +170,7 @@ function CompanyForm() {
           )}
         />
 
+        {/* Full width for logo upload */}
         <FormField
           control={form.control}
           name="logo"
@@ -179,12 +202,9 @@ function CompanyForm() {
                     <UploadDropzone
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
-                        field.onChange(res[0].ufsUrl);
-                       
+                        field.onChange(res[0].url);
                       }}
-                      onUploadError={() => {
-                   
-                      }}
+                      onUploadError={() => {}}
                       className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
                     />
                   )}
@@ -194,9 +214,11 @@ function CompanyForm() {
             </FormItem>
           )}
         />
+
+        <Button type="submit" className="w-full" disabled={pending}>
+          {pending ? "Submitting..." : "Continue"}
+        </Button>
       </form>
     </Form>
   );
 }
-
-export default CompanyForm;
