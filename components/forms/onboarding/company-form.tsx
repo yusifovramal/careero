@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { XIcon } from "lucide-react";
 
+import { toast } from "sonner";
 import { useState } from "react";
 
 import {
@@ -28,8 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { companySchema } from "@/lib/zodSchemas";
 import { createCompany } from "@/lib/actions";
+import { companySchema } from "@/lib/zodSchemas";
 import { countryList } from "@/lib/constants/countriesList";
 import { UploadDropzone } from "@/components/common/upload-thing";
 
@@ -55,6 +56,7 @@ export default function CompanyForm() {
     } catch (error) {
       console.log(error);
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+        toast.error("Something went wrong. Please try again.");
       }
     } finally {
       setPending(false);
@@ -64,7 +66,6 @@ export default function CompanyForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Two column layout for basic info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
@@ -84,12 +85,11 @@ export default function CompanyForm() {
             control={form.control}
             name="location"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem>
                 <FormLabel>Location</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -121,7 +121,6 @@ export default function CompanyForm() {
           />
         </div>
 
-        {/* Two column layout for website and X account */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
@@ -152,7 +151,6 @@ export default function CompanyForm() {
           />
         </div>
 
-        {/* Full width for about section */}
         <FormField
           control={form.control}
           name="about"
@@ -171,7 +169,6 @@ export default function CompanyForm() {
           )}
         />
 
-        {/* Full width for logo upload */}
         <FormField
           control={form.control}
           name="logo"
@@ -204,8 +201,11 @@ export default function CompanyForm() {
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
                         field.onChange(res[0].url);
+                        toast.success("Logo uploaded successfully!");
                       }}
-                      onUploadError={() => {}}
+                      onUploadError={() => {
+                        toast.error("Something went wrong. Please try again.");
+                      }}
                       className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
                     />
                   )}
