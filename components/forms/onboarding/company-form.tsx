@@ -84,11 +84,12 @@ export default function CompanyForm() {
             control={form.control}
             name="location"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Location</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  
                 >
                   <FormControl>
                     <SelectTrigger>
