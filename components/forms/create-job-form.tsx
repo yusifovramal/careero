@@ -25,6 +25,7 @@ import {
 } from "../ui/select";
 import { countryList } from "@/lib/constants/countriesList";
 import JobDescriptionEditor from "../rich-text-editor/job-description-editor";
+import { SalaryRangeSelector } from "../common/salary-range-selector.";
 
 function CreateJobForm() {
   const form = useForm<z.infer<typeof jobSchema>>({
