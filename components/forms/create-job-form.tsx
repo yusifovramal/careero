@@ -166,7 +166,7 @@ function CreateJobForm() {
                 <FormItem>
                   <FormLabel>Job Description</FormLabel>
                   <FormControl>
-                    <JobDescriptionEditor />
+                    <JobDescriptionEditor field={field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
