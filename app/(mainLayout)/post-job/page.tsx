@@ -1,5 +1,5 @@
 
-import CreateJobForm from "@/components/forms/create-job-form";
+import { CreateJobForm } from "@/components/forms/create-job-form";
 import {
   Card,
   CardContent,
@@ -8,12 +8,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { companies, stats, testimonials } from "@/lib/constants/postJobConsts";
+import prisma from "@/lib/db";
+import { requireUser } from "@/lib/requireUser";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-function PostJob() {
+async function getCompany(userId: string) {
+  const data = await prisma.company.findUnique({
+    where: {
+      userId: userId,
+    },
+    select: {
+      name: true,
+      location: true,
+      about: true,
+      logo: true,
+      xAccount: true,
+      website: true,
+    },
+  });
+
+  if (!data) {
+    return redirect("/");
+  }
+  return data;
+}
+
+const PostJobPage = async () => {
+  const session = await requireUser();
+  const data = await getCompany(session.id as string);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5">
-      <CreateJobForm />
+      <CreateJobForm
+        companyAbout={data.about}
+        companyLocation={data.location}
+        companyLogo={data.logo}
+        companyName={data.name}
+        companyXAccount={data.xAccount}
+        companyWebsite={data.website}
+      />
+
       <div className="col-span-1">
         <Card className="lg:sticky lg:top-4">
           <CardHeader>
@@ -58,6 +92,7 @@ function PostJob() {
               ))}
             </div>
 
+            {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
               {stats.map((stat, index) => (
                 <div key={index} className="rounded-lg bg-muted p-4">
@@ -73,6 +108,7 @@ function PostJob() {
       </div>
     </div>
   );
-}
+};
 
-export default PostJob;
+export default PostJobPage;
+
