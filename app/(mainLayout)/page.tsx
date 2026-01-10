@@ -1,10 +1,14 @@
+import JobFilter from "@/components/common/job-filter";
 
-function page() {
+function Home() {
   return (
-    <div>
-      
+    <div className="grid grid-cols-3 gap-8">
+      <JobFilter />
+      <div className="col-span-2 flex flex-col gap-6">
+        g
+      </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default Home
